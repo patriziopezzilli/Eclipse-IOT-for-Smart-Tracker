@@ -13,5 +13,10 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="/Users/Patrizio1/GitHub/BiblioManager/web/WEB-INF/lib/commons-fileupload-1.3.1.jar"/>
+	<classpathentry kind="lib" path="/Users/Patrizio1/GitHub/BiblioManager/web/WEB-INF/lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="/Users/Patrizio1/GitHub/BiblioManager/web/WEB-INF/lib/commons-validator-1.4.1.jar"/>
+	<classpathentry kind="lib" path="/Users/Patrizio1/GitHub/BiblioManager/web/WEB-INF/lib/freemarker.jar"/>
+	<classpathentry kind="lib" path="/Users/Patrizio1/GitHub/BiblioManager/web/WEB-INF/lib/mysql-connector-java-5.1.37-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
