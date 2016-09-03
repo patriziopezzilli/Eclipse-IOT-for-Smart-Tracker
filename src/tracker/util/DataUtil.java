@@ -18,8 +18,6 @@ import javax.naming.NamingException;
  */
 public class DataUtil {
 	
-	
-	
 	 
 	public static String getUsername(String email) throws Exception {
 		

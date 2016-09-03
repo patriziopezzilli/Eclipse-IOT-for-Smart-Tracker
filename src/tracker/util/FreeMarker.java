@@ -33,7 +33,7 @@ public class FreeMarker {
         
         cfg.setDefaultEncoding("UTF-8");
             
-        cfg.setServletContextForTemplateLoading(servlet_context, "/OOP_Template");
+        cfg.setServletContextForTemplateLoading(servlet_context, "/template");
         
         
         
@@ -42,10 +42,6 @@ public class FreeMarker {
         wrapper.setSimpleMapWrapper(true);
         cfg.setObjectWrapper(wrapper);
 
-        
-        
-        
-        
         Template template = cfg.getTemplate(path_template);
         
         PrintWriter out = response.getWriter();

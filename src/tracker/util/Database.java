@@ -14,7 +14,7 @@ import java.util.Map;
 public class Database {
 	
 	protected static String DRIVER = "com.mysql.jdbc.Driver";
-	protected static String url = "jdbc:mysql://localhost/BDigitale";
+	protected static String url = "jdbc:mysql://localhost/SporttrackerDB";
 	protected static String user = "root";
 	protected static String psw = "root";
 
