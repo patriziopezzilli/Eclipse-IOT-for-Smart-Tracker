@@ -1,0 +1,64 @@
+<#include "framepublic.html">
+<section class="panel">
+	<header class="panel-heading">
+		<div class="panel-actions">
+			<a href="#" class="panel-action panel-action-toggle"
+				data-panel-toggle></a> <a href="#"
+				class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+		</div>
+
+		<h2 class="panel-title">Dispositivo da rimuovere</h2>
+	</header>
+	<div class="panel-body">
+		<form class="form-horizontal form-bordered" action="deletedevice"
+			method="post">
+			<div class="form-group">
+				<label class="col-md-3 control-label" for="inputDefault">Seriale</label>
+				<div class="col-md-6">
+					<input type="text" name="serial" class="form-control"
+						id="inputDefault">
+				</div>
+			</div>
+			<div class="col-sm-4 text-right">
+				<button style="margin-left: 20em;" type="submit"
+					class="btn btn-primary hidden-xs">Rimuovi</button>
+			</div>
+		</form>
+	</div>
+</section>
+<section class="panel">
+	<header class="panel-heading">
+		<div class="panel-actions">
+			<a href="#" class="panel-action panel-action-toggle"
+				data-panel-toggle></a> <a href="#"
+				class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+		</div>
+
+		<h2 class="panel-title">Elenco Dispositivi</h2>
+	</header>
+
+	<#if lista_device?first ??>
+	<div class="panel-body">
+		<table class="table table-bordered table-striped mb-none"
+			id="datatable-default">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Serial</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list lista_device as device>
+				<tr class="gradeA">
+					<td>${device.id} AHAHHAH</td>
+					<td>${device.serial}</td>
+				</tr>
+				</#list>
+
+			</tbody>
+		</table>
+	</div>
+	<#else> Non sono presenti device rimuovibili </#if>
+</section>
+ 
+<#include "footer.html">

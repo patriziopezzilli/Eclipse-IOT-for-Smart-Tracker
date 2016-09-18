@@ -1,0 +1,35 @@
+<#include "framepublic.html">
+<section class="panel">
+							<header class="panel-heading">
+								<div class="panel-actions">
+									<a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+									<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+								</div>
+						
+								<h2 class="panel-title">Elenco Dispositivi</h2>
+							</header>
+							
+							<#if lista_device?first ??>
+							<div class="panel-body">
+								<table class="table table-bordered table-striped mb-none" id="datatable-default">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Serial</th>
+										</tr>
+									</thead>
+									<tbody>
+										<#list lista_device as device> 
+										<tr class="gradeA">
+											<td>${device.id}</td>
+											<td>${device.serial}</td>
+										</tr>
+										</#list>
+									</tbody>
+								</table>
+							</div>
+							<#else>
+							<p>Device non presenti </p>
+							</#if>
+						</section>
+<#include "footer.html">

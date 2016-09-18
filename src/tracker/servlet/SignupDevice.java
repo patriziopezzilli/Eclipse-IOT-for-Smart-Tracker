@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Patrizio
  */
-public class Signup extends HttpServlet {
+public class SignupDevice extends HttpServlet {
 
     
 	/**
@@ -36,38 +36,35 @@ public class Signup extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+    	
         Map data = new HashMap();
         HttpSession s = SecurityLayer.checkSession(request);
+        
         if (s != null) {
-            response.sendRedirect("index");
-        } else if (request.getMethod().equals("POST")) {
-            //Recupera il nome dell'utente
-            String nome = request.getParameter("nome");
-            //Recupera l'email dell'utente
-            String email = request.getParameter("email");
-            //Recupera la password dell'utente
-            String password = request.getParameter("password");
+        	
+            if (request.getMethod().equals("POST")) {
+            //Recupera il seriale del device
+            String serial = request.getParameter("serial");
 
             Database.connect();
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("email", email);
-            map.put("password", DataUtil.crypt(password));
-            map.put("nome", nome);
+            map.put("serial", serial);
+            map.put("email_user", (String) s.getAttribute("username"));
 
-            Database.insertRecord("users", map);
-            ResultSet rs = Database.selectRecord("users", "email='" + email + "'");
-            int k = 0;
-            while (rs.next()) {
-                k = rs.getInt("id");
-            }
-            SecurityLayer.createSession(request, email, k);
+            Database.insertRecord("devices", map);
 
-            Database.close();
-
-            response.sendRedirect("index");
+            response.sendRedirect("devicelist");
         } else {
-            FreeMarker.process("pages-signup.html", data, response, getServletContext());
+        	
+        	data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
+			data.put("userMail", (String) s.getAttribute("username"));
+			data.put("titlePage", "Aggiunta Device");
+            FreeMarker.process("device-signup.html", data, response, getServletContext());
         }
+      } else {
+    	  //mando alla login
+    	  response.sendRedirect("pages-signin");
+      }
     }
 
     /**

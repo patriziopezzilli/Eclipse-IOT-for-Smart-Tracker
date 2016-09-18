@@ -18,6 +18,18 @@
         <servlet-name>Signup</servlet-name>
         <servlet-class>tracker.servlet.Signup</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListDevice</servlet-name>
+        <servlet-class>tracker.servlet.ListDevice</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignupDevice</servlet-name>
+        <servlet-class>tracker.servlet.SignupDevice</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteDevice</servlet-name>
+        <servlet-class>tracker.servlet.DeleteDevice</servlet-class>
+    </servlet>
     
     
     
@@ -33,6 +45,18 @@
         <servlet-mapping>
         <servlet-name>Signup</servlet-name>
         <url-pattern>/pages-signup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListDevice</servlet-name>
+        <url-pattern>/devicelist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignupDevice</servlet-name>
+        <url-pattern>/device-signup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteDevice</servlet-name>
+        <url-pattern>/deletedevice</url-pattern>
     </servlet-mapping>
     
     

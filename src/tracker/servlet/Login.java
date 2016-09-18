@@ -23,7 +23,7 @@ import tracker.util.FreeMarker;
 /**
  * servlet per la homepage
  *
- * @author Biblioteca Digitale
+ * @author Patrizio
  */
 public class Login extends HttpServlet {
 
