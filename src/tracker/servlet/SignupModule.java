@@ -1,5 +1,10 @@
 package tracker.servlet;
 
+import tracker.model.Module;
+import tracker.util.DataUtil;
+import tracker.util.Database;
+import tracker.util.FreeMarker;
+import tracker.util.SecurityLayer;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,19 +22,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import tracker.model.Device;
-import tracker.model.Module;
-import tracker.util.DataUtil;
-import tracker.util.Database;
-import tracker.util.FreeMarker;
-import tracker.util.SecurityLayer;
-
 /**
- * servlet per la pagina di lista dei device con opzione di delete
+ * servlet per l'aggiunta di un nuovo modulo
  *
  * @author Patrizio
  */
-public class DeleteDevice extends HttpServlet {
+public class SignupModule extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,32 +40,42 @@ public class DeleteDevice extends HttpServlet {
 	 * @throws Exception
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
 		Database.connect();
-		HttpSession s = SecurityLayer.checkSession(request);
 		Map data = new HashMap();
+		HttpSession s = SecurityLayer.checkSession(request);
 
 		if (s != null) {
-			
-			if (request.getMethod().equals("POST")) {
-				
-				String serial = request.getParameter("serial");
-				Database.deleteRecord("devices", "serial='" + serial + "'");
-				response.sendRedirect("devicelist");
-				
-			} else {
-				
-				/* RETRIVING MODULE */
-	        	 
-	        	 //retriving module --> andrà cambiato prendendo con il JOIN
-	        	 //solo i moduli dei dispositivi associati al player corrente
-	        	 ResultSet ss = Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
-	 			 List<Module> modules_2 = new ArrayList<Module>();
 
-	 			 while (ss.next()) {
-	 				 
-	 				int id = ss.getInt("id");
-					String name= ss.getString("name");
+			if (request.getMethod().equals("POST")) {
+				// Recupera il seriale del device
+				String name = request.getParameter("name");
+				String iframe = request.getParameter("iframe");
+				String serial = request.getParameter("serial");
+
+				
+				Map<String, Object> map = new HashMap<String, Object>();
+
+				// da cambiare
+				map.put("name", name);
+				map.put("iframe", iframe);
+				map.put("id_device", serial);
+
+				Database.insertRecord("modules", map);
+
+				response.sendRedirect("modulelist");
+			} else {
+
+				/* RETRIVING MODULE */
+
+				// retriving module --> andrà cambiato prendendo con il JOIN
+				// solo i moduli dei dispositivi associati al player corrente
+				ResultSet ss = Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
+				List<Module> modules_2 = new ArrayList<Module>();
+
+				while (ss.next()) {
+
+					int id = ss.getInt("id");
+					String name = ss.getString("name");
 					String iframe = ss.getString("iframe");
 					String serial = ss.getString("id_device");
 
@@ -76,39 +84,20 @@ public class DeleteDevice extends HttpServlet {
 					modules_2.add(moduleTemp);
 
 				}
-				
+
 				data.put("lista_modules_menu", modules_2);
-	        	 
+
 				/* END RETRIVING MODULE */
-				
+
 				data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
 				data.put("userMail", (String) s.getAttribute("username"));
-				data.put("titlePage", "Dispositivi");
-
-				ResultSet rs = Database.selectRecord("devices", "email_user = '" + (String) s.getAttribute("username") + "'");
-				List<Device> devices = new ArrayList<Device>();
-
-				while (rs.next()) {
-					int id = rs.getInt("id");
-					String serial = rs.getString("serial");
-
-					Device deviceTemp = new Device(id, serial);
-
-					devices.add(deviceTemp);
-
-				}
-				
-				data.put("lista_device", devices);
-
-				FreeMarker.process("deletedevice.html", data, response, getServletContext());
-				
+				data.put("titlePage", "Aggiunta Modulo");
+				FreeMarker.process("module-signup.html", data, response, getServletContext());
 			}
-			
-			
 		} else {
+			// mando alla login
 			response.sendRedirect("pages-signin");
 		}
-
 		Database.close();
 	}
 

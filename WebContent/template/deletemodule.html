@@ -1,0 +1,64 @@
+<#include "framepublic.html">
+<section class="panel">
+	<header class="panel-heading">
+		<div class="panel-actions">
+			<a href="#" class="panel-action panel-action-toggle"
+				data-panel-toggle></a> <a href="#"
+				class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+		</div>
+
+		<h2 class="panel-title">Modulo da rimuovere</h2>
+	</header>
+	<div class="panel-body">
+		<form class="form-horizontal form-bordered" action="deletemodule"
+			method="post">
+			<div class="form-group">
+				<label class="col-md-3 control-label" for="inputDefault">ID</label>
+				<div class="col-md-6">
+					<input type="text" name="id" class="form-control"
+						id="inputDefault">
+				</div>
+			</div>
+			<div class="col-sm-4 text-right">
+				<button style="margin-left: 20em;" type="submit"
+					class="btn btn-primary hidden-xs">Rimuovi</button>
+			</div>
+		</form>
+	</div>
+</section>
+<section class="panel">
+	<header class="panel-heading">
+		<div class="panel-actions">
+			<a href="#" class="panel-action panel-action-toggle"
+				data-panel-toggle></a> <a href="#"
+				class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+		</div>
+
+		<h2 class="panel-title">Elenco Moduli</h2>
+	</header>
+
+	<#if lista_module?first ??>
+	<div class="panel-body">
+		<table class="table table-bordered table-striped mb-none"
+			id="datatable-default">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Serial</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list lista_module as module>
+				<tr class="gradeA">
+					<td>${module.id}</td>
+					<td>${module.id_device}</td>
+				</tr>
+				</#list>
+
+			</tbody>
+		</table>
+	</div>
+	<#else> Non sono presenti moduli rimuovibili </#if>
+</section>
+ 
+<#include "footer.html">

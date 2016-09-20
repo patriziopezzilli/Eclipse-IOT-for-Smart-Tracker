@@ -25,11 +25,11 @@ import tracker.util.FreeMarker;
 import tracker.util.SecurityLayer;
 
 /**
- * servlet per la pagina di lista dei device con opzione di delete
+ * servlet per la pagina di lista dei moduli con opzione di delete
  *
  * @author Patrizio
  */
-public class DeleteDevice extends HttpServlet {
+public class DeleteModule extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,12 +51,11 @@ public class DeleteDevice extends HttpServlet {
 			
 			if (request.getMethod().equals("POST")) {
 				
-				String serial = request.getParameter("serial");
-				Database.deleteRecord("devices", "serial='" + serial + "'");
-				response.sendRedirect("devicelist");
+				String id = request.getParameter("id");
+				Database.deleteRecord("modules", "id='" + id + "'");
+				response.sendRedirect("modulelist");
 				
 			} else {
-				
 				/* RETRIVING MODULE */
 	        	 
 	        	 //retriving module --> andrà cambiato prendendo con il JOIN
@@ -80,27 +79,29 @@ public class DeleteDevice extends HttpServlet {
 				data.put("lista_modules_menu", modules_2);
 	        	 
 				/* END RETRIVING MODULE */
-				
 				data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
 				data.put("userMail", (String) s.getAttribute("username"));
-				data.put("titlePage", "Dispositivi");
+				data.put("titlePage", "Moduli");
 
-				ResultSet rs = Database.selectRecord("devices", "email_user = '" + (String) s.getAttribute("username") + "'");
-				List<Device> devices = new ArrayList<Device>();
+				ResultSet rs = Database.selectRecord("modules", "1");
+				List<Module> modules = new ArrayList<Module>();
 
 				while (rs.next()) {
+					
 					int id = rs.getInt("id");
-					String serial = rs.getString("serial");
+					String name= rs.getString("name");
+					String iframe = rs.getString("iframe");
+					String serial = rs.getString("id_device");
 
-					Device deviceTemp = new Device(id, serial);
+					Module moduleTemp = new Module(id, name, iframe, serial);
 
-					devices.add(deviceTemp);
+					modules.add(moduleTemp);
 
 				}
 				
-				data.put("lista_device", devices);
+				data.put("lista_module", modules);
 
-				FreeMarker.process("deletedevice.html", data, response, getServletContext());
+				FreeMarker.process("deletemodule.html", data, response, getServletContext());
 				
 			}
 			

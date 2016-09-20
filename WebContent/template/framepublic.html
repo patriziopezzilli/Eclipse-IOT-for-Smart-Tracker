@@ -75,7 +75,7 @@
 							<ul class="list-unstyled">
 								<li class="divider"></li>
 								<li>
-									<a role="menuitem" tabindex="-1" href="pages-signin.html"><i class="fa fa-power-off"></i> Logout</a>
+									<a role="menuitem" tabindex="-1" href="logout"><i class="fa fa-power-off"></i> Logout</a>
 								</li>
 							</ul>
 						</div>
@@ -106,6 +106,18 @@
 										<a href="index">
 											<i class="fa fa-home" aria-hidden="true"></i>
 											<span>Panoramica</span>
+										</a>
+									</li>
+									<li class="nav">
+										<a href="index">
+											<i class="fa fa-user" aria-hidden="true"></i>
+											<span>Amici</span>
+										</a>
+									</li>
+									<li class="nav">
+										<a href="index">
+											<i class="fa fa-tree" aria-hidden="true"></i>
+											<span>Luoghi e Meteo</span>
 										</a>
 									</li>
 									<li class="nav-parent">
@@ -139,23 +151,64 @@
 										</a>
 										<ul class="nav nav-children">
 										<li>
-												<a href="pages-signup.html">
+												<a href="modulelist">
 													 Elenco moduli
 												</a>
 											</li>
 											<li>
-												<a href="pages-signup.html">
+												<a href="module-signup">
 													 Aggiungi modulo
 												</a>
 											</li>
 											<li>
-												<a href="pages-signup.html">
+												<a href="deletemodule">
 													 Rimuovi modulo
 												</a>
 											</li>
 											
 										</ul>
 									</li>
+									
+									<#if lista_modules_menu?first ??>
+									<#list lista_modules_menu as module> 
+									<#if module.name == "GPS">
+									<li class="nav-parent">
+										
+										<a >
+											<i class="fa fa-signal" aria-hidden="true"></i>
+											<span>GPS</span>
+										</a>
+										<ul class="nav nav-children">
+										<li>
+												<a href="module_detail?id=${module.id}">
+													 Real Time
+												</a>
+											</li>
+											<li>
+												<a href="pathcontroller">
+													 Percorsi
+												</a>
+											</li>
+											
+										</ul>
+										
+										</a>
+									</li>
+									<#else>
+									<li class="nav">
+									
+										
+										<a href="module_detail?id=${module.id}">
+										
+											
+											<i class="fa fa-bars" aria-hidden="true"></i>
+										
+											<span>${module.name}</span>
+										</a>
+									</li>
+									</#if>
+									</#list>
+									</#if>
 									
 							</nav>
 				

@@ -5,9 +5,9 @@ public class Module {
 	int id;
 	String name;
 	String iframe;
-	int id_device;
+	String id_device;
 	
-	public Module(int id, String name, String iframe, int id_device) {
+	public Module(int id, String name, String iframe, String id_device) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -39,11 +39,11 @@ public class Module {
 		this.iframe = iframe;
 	}
 
-	public int getId_device() {
+	public String getId_device() {
 		return id_device;
 	}
 
-	public void setId_device(int id_device) {
+	public void setId_device(String id_device) {
 		this.id_device = id_device;
 	}
 	

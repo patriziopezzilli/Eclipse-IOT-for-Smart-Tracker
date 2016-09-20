@@ -25,11 +25,11 @@ import tracker.util.FreeMarker;
 import tracker.util.SecurityLayer;
 
 /**
- * servlet per la pagina di lista dei device con opzione di delete
+ * servlet per la pagina di lista dei moduli
  *
  * @author Patrizio
  */
-public class DeleteDevice extends HttpServlet {
+public class ListModule extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,61 +49,52 @@ public class DeleteDevice extends HttpServlet {
 
 		if (s != null) {
 			
-			if (request.getMethod().equals("POST")) {
-				
-				String serial = request.getParameter("serial");
-				Database.deleteRecord("devices", "serial='" + serial + "'");
-				response.sendRedirect("devicelist");
-				
-			} else {
-				
-				/* RETRIVING MODULE */
-	        	 
-	        	 //retriving module --> andrà cambiato prendendo con il JOIN
-	        	 //solo i moduli dei dispositivi associati al player corrente
-	        	 ResultSet ss = Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
-	 			 List<Module> modules_2 = new ArrayList<Module>();
+			/* RETRIVING MODULE */
+       	 
+       	 //retriving module --> andrà cambiato prendendo con il JOIN
+       	 //solo i moduli dei dispositivi associati al player corrente
+       	 ResultSet ss = Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
+			 List<Module> modules_2 = new ArrayList<Module>();
 
-	 			 while (ss.next()) {
-	 				 
-	 				int id = ss.getInt("id");
-					String name= ss.getString("name");
-					String iframe = ss.getString("iframe");
-					String serial = ss.getString("id_device");
+			 while (ss.next()) {
+				 
+				int id = ss.getInt("id");
+				String name= ss.getString("name");
+				String iframe = ss.getString("iframe");
+				String serial = ss.getString("id_device");
 
-					Module moduleTemp = new Module(id, name, iframe, serial);
+				Module moduleTemp = new Module(id, name, iframe, serial);
 
-					modules_2.add(moduleTemp);
+				modules_2.add(moduleTemp);
 
-				}
-				
-				data.put("lista_modules_menu", modules_2);
-	        	 
-				/* END RETRIVING MODULE */
-				
-				data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
-				data.put("userMail", (String) s.getAttribute("username"));
-				data.put("titlePage", "Dispositivi");
-
-				ResultSet rs = Database.selectRecord("devices", "email_user = '" + (String) s.getAttribute("username") + "'");
-				List<Device> devices = new ArrayList<Device>();
-
-				while (rs.next()) {
-					int id = rs.getInt("id");
-					String serial = rs.getString("serial");
-
-					Device deviceTemp = new Device(id, serial);
-
-					devices.add(deviceTemp);
-
-				}
-				
-				data.put("lista_device", devices);
-
-				FreeMarker.process("deletedevice.html", data, response, getServletContext());
-				
 			}
 			
+			data.put("lista_modules_menu", modules_2);
+       	 
+			/* END RETRIVING MODULE */
+			data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
+			data.put("userMail", (String) s.getAttribute("username"));
+			data.put("titlePage", "Moduli");
+
+			ResultSet rs = Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
+			List<Module> modules = new ArrayList<Module>();
+
+			while (rs.next()) {
+				
+				int id = rs.getInt("id");
+				String name= rs.getString("name");
+				String iframe = rs.getString("iframe");
+				String serial = rs.getString("id_device");
+
+				Module moduleTemp = new Module(id, name, iframe, serial);
+
+				modules.add(moduleTemp);
+
+			}
+			
+			data.put("lista_modules", modules);
+
+			FreeMarker.process("modulelist.html", data, response, getServletContext());
 			
 		} else {
 			response.sendRedirect("pages-signin");

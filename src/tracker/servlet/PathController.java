@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.isNull;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,19 +17,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import tracker.model.Device;
 import tracker.model.Module;
+import tracker.model.Path;
 import tracker.util.DataUtil;
 import tracker.util.Database;
 import tracker.util.FreeMarker;
 import tracker.util.SecurityLayer;
 
 /**
- * servlet per la pagina di lista dei device con opzione di delete
- *
- * @author Patrizio
- */
-public class DeleteDevice extends HttpServlet {
+@author Patrizio
+*/
+public class PathController extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,12 +49,30 @@ public class DeleteDevice extends HttpServlet {
 			
 			if (request.getMethod().equals("POST")) {
 				
-				String serial = request.getParameter("serial");
-				Database.deleteRecord("devices", "serial='" + serial + "'");
-				response.sendRedirect("devicelist");
+				String id = request.getParameter("id");
+				
+				if(id != null){
+					//delete mode
+					Database.deleteRecord("path", "id='" + id + "'");
+				} else {
+					//add mode
+					String city = request.getParameter("city");
+					String km = request.getParameter("km");
+					String time = request.getParameter("time");
+
+					
+					Map<String, Object> map = new HashMap<String, Object>();
+
+					// da cambiare
+					map.put("city", city);
+					map.put("km", km);
+					map.put("time", time);
+					map.put("user", (String) s.getAttribute("username"));
+
+					Database.insertRecord("path", map);
+				}
 				
 			} else {
-				
 				/* RETRIVING MODULE */
 	        	 
 	        	 //retriving module --> andrà cambiato prendendo con il JOIN
@@ -80,27 +96,30 @@ public class DeleteDevice extends HttpServlet {
 				data.put("lista_modules_menu", modules_2);
 	        	 
 				/* END RETRIVING MODULE */
-				
 				data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
 				data.put("userMail", (String) s.getAttribute("username"));
-				data.put("titlePage", "Dispositivi");
+				data.put("titlePage", "Percorsi");
 
-				ResultSet rs = Database.selectRecord("devices", "email_user = '" + (String) s.getAttribute("username") + "'");
-				List<Device> devices = new ArrayList<Device>();
+				ResultSet rs = Database.selectRecord("path", "user='"+(String) s.getAttribute("username")+"'");
+				List<Path> paths = new ArrayList<Path>();
 
 				while (rs.next()) {
+					
 					int id = rs.getInt("id");
-					String serial = rs.getString("serial");
+					String city= rs.getString("city");
+					int km = rs.getInt("km");
+					int time = rs.getInt("time"); 		//express in hours
+					String user = rs.getString("user");
 
-					Device deviceTemp = new Device(id, serial);
+					Path pathTemp = new Path(id, city, km, time, user);
 
-					devices.add(deviceTemp);
+					paths.add(pathTemp);
 
 				}
 				
-				data.put("lista_device", devices);
+				data.put("lista_path", paths);
 
-				FreeMarker.process("deletedevice.html", data, response, getServletContext());
+				FreeMarker.process("pathcontroller.html", data, response, getServletContext());
 				
 			}
 			

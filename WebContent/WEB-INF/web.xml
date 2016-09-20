@@ -30,6 +30,30 @@
         <servlet-name>DeleteDevice</servlet-name>
         <servlet-class>tracker.servlet.DeleteDevice</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SignupModule</servlet-name>
+        <servlet-class>tracker.servlet.SignupModule</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListModule</servlet-name>
+        <servlet-class>tracker.servlet.ListModule</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteModule</servlet-name>
+        <servlet-class>tracker.servlet.DeleteModule</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModuleDetail</servlet-name>
+        <servlet-class>tracker.servlet.ModuleDetail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>tracker.servlet.Logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PathController</servlet-name>
+        <servlet-class>tracker.servlet.PathController</servlet-class>
+    </servlet>
     
     
     
@@ -58,8 +82,30 @@
         <servlet-name>DeleteDevice</servlet-name>
         <url-pattern>/deletedevice</url-pattern>
     </servlet-mapping>
-    
-    
+    <servlet-mapping>
+        <servlet-name>SignupModule</servlet-name>
+        <url-pattern>/module-signup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListModule</servlet-name>
+        <url-pattern>/modulelist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteModule</servlet-name>
+        <url-pattern>/deletemodule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>ModuleDetail</servlet-name>
+        <url-pattern>/module_detail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>PathController</servlet-name>
+        <url-pattern>/pathcontroller</url-pattern>
+    </servlet-mapping>
     
     
     

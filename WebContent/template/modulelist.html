@@ -1,0 +1,35 @@
+<#include "framepublic.html">
+<section class="panel">
+							<header class="panel-heading">
+								<div class="panel-actions">
+									<a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+									<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+								</div>
+						
+								<h2 class="panel-title">Elenco Moduli</h2>
+							</header>
+							
+							<#if lista_modules?first ??>
+							<div class="panel-body">
+								<table class="table table-bordered table-striped mb-none" id="datatable-default">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Serial Dispositivo</th>
+										</tr>
+									</thead>
+									<tbody>
+										<#list lista_modules as module> 
+										<tr class="gradeA">
+											<td>${module.id}</td>
+											<td>${module.id_device}</td>
+										</tr>
+										</#list>
+									</tbody>
+								</table>
+							</div>
+							<#else>
+							<p>Moduli non presenti </p>
+							</#if>
+						</section>
+<#include "footer.html">
