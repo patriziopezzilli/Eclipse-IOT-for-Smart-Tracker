@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="/Users/Patrizio1/GitHub/BiblioManager/web/WEB-INF/lib/commons-validator-1.4.1.jar"/>
 	<classpathentry kind="lib" path="/Users/Patrizio1/GitHub/BiblioManager/web/WEB-INF/lib/freemarker.jar"/>
 	<classpathentry kind="lib" path="/Users/Patrizio1/GitHub/BiblioManager/web/WEB-INF/lib/mysql-connector-java-5.1.37-bin.jar"/>
+	<classpathentry kind="lib" path="/Users/Patrizio1/Downloads/owm-japis-2.5.0.3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -1,0 +1,58 @@
+<#include "framepublic.html">
+					<!-- start: page -->
+					<div class="row">
+						<div class="col-md-6 col-lg-12 col-xl-6">
+							<section class="panel">
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-lg-4">
+											<div class="chart-data-selector" id="salesSelectorWrapper">
+												<h2>
+													${city}
+												</h2>
+												</br>
+											<section class="panel panel-featured-left panel-featured-primary">
+										<div class="panel-body">
+											<div class="widget-summary">
+												<div class="widget-summary-col widget-summary-col-icon">
+													
+													
+														<#if temp < 10>
+														<img src="template/assets/images/snow.png" style="margin-right:2em;">
+														<#elseif temp <20>
+														<img src="template/assets/images/cloud.png" style="margin-right:2em;">
+														<#else>
+														<img src="template/assets/images/sun.png" style="margin-right:2em;">
+														</#if>
+														
+													
+												</div>
+												<div class="widget-summary-col">
+													<div class="summary">
+														<h4 class="title">Temperatura</h4>
+														<div class="info">
+															<strong class="amount">${temp} F</strong>
+															</br>
+															<span class="text-primary">Min: ${minTemp} F</span></br>
+															<span class="text-primary">Max: ${minTemp} F</span></br>
+															<span class="text-primary">Umidità: ${humidity}</span>
+														</div>
+															<span class="text-primary">Pressione: ${pressure}</span>
+													</div>
+													
+												</div>
+											</div>
+										</div>
+									</section>
+										</div>
+										
+									</div>
+								
+								</div>
+								
+								
+							</section>
+							
+						</div>
+						
+				<#include "footer.html">

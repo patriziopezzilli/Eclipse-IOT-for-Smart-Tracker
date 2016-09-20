@@ -54,6 +54,10 @@
         <servlet-name>PathController</servlet-name>
         <servlet-class>tracker.servlet.PathController</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>MeteoController</servlet-name>
+        <servlet-class>tracker.servlet.MeteoController</servlet-class>
+    </servlet>
     
     
     
@@ -106,7 +110,10 @@
     <servlet-name>PathController</servlet-name>
         <url-pattern>/pathcontroller</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+    <servlet-name>MeteoController</servlet-name>
+        <url-pattern>/meteo</url-pattern>
+    </servlet-mapping>
     
     
     
