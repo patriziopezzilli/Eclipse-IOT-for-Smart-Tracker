@@ -1,5 +1,6 @@
 package tracker.servlet;
 
+import tracker.model.Friend;
 import tracker.model.Module;
 import tracker.util.DataUtil;
 import tracker.util.Database;
@@ -61,7 +62,11 @@ public class SignupModule extends HttpServlet {
 				map.put("id_device", serial);
 
 				Database.insertRecord("modules", map);
+				Map<String, Object> events = new HashMap<String, Object>();
+				events.put("description", "Ho aggiunto il modulo "+ name);
+				events.put("email_user", (String) s.getAttribute("username"));
 
+				Database.insertRecord("events", events);
 				response.sendRedirect("modulelist");
 			} else {
 
@@ -92,6 +97,35 @@ public class SignupModule extends HttpServlet {
 				data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
 				data.put("userMail", (String) s.getAttribute("username"));
 				data.put("titlePage", "Aggiunta Modulo");
+				
+				/* 	RETRIVING FRIENDS */
+				ResultSet fr = Database.selectRecord("friends", "my_mail='"+ (String) s.getAttribute("username") + "'");
+				List<Friend> friends = new ArrayList<Friend>();
+				while(fr.next()){
+					
+					//retrive friend data
+					int id = fr.getInt("id");
+					String friend_mail = fr.getString("friend_mail");
+					
+					int totKm = 0;
+					//retrive tot km
+					ResultSet km = Database.selectRecord("path", "user='"+ friend_mail + "'");
+					while(km.next()){
+						totKm += km.getInt("km");
+					}
+					
+					//retriving name
+					ResultSet us = Database.selectRecord("users", "email='"+ friend_mail + "'");
+					us.next();
+					String name = us.getString("nome");
+
+					int active = us.getInt("active");
+					//now create the obj and add to the list
+					Friend tempUser = new Friend(id,friend_mail,totKm,name,active);
+					friends.add(tempUser);
+					
+				}
+				data.put("friendList", friends);
 				FreeMarker.process("module-signup.html", data, response, getServletContext());
 			}
 		} else {

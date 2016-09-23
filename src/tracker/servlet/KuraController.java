@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.isNull;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import tracker.model.Device;
 import tracker.model.Friend;
 import tracker.model.Module;
 import tracker.util.DataUtil;
@@ -25,12 +24,7 @@ import tracker.util.Database;
 import tracker.util.FreeMarker;
 import tracker.util.SecurityLayer;
 
-/**
- * servlet per la pagina di lista dei moduli con opzione di delete
- *
- * @author Patrizio
- */
-public class DeleteModule extends HttpServlet {
+public class KuraController extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,36 +37,29 @@ public class DeleteModule extends HttpServlet {
 	 * @throws Exception
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
 		Database.connect();
-		HttpSession s = SecurityLayer.checkSession(request);
 		Map data = new HashMap();
+		HttpSession s = SecurityLayer.checkSession(request);
 
 		if (s != null) {
-			
-			if (request.getMethod().equals("POST")) {
-				
-				String id = request.getParameter("id");
-				Database.deleteRecord("modules", "id='" + id + "'");
-				Map<String, Object> events = new HashMap<String, Object>();
-				events.put("description", "Ho eliminato il modulo "+ id);
-				events.put("email_user", (String) s.getAttribute("username"));
 
-				Database.insertRecord("events", events);
-				response.sendRedirect("modulelist");
-				
+			if (request.getMethod().equals("POST")) {
+				// Recupera ip da reinderizzare
+				String ip = request.getParameter("ip");
+				System.out.println(ip);
+				response.sendRedirect("http://"+ip);
 			} else {
 				/* RETRIVING MODULE */
-	        	 
-	        	 //retriving module --> andrà cambiato prendendo con il JOIN
-	        	 //solo i moduli dei dispositivi associati al player corrente
-	        	 ResultSet ss = Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
-	 			 List<Module> modules_2 = new ArrayList<Module>();
 
-	 			 while (ss.next()) {
-	 				 
-	 				int id = ss.getInt("id");
-					String name= ss.getString("name");
+				// retriving module --> andrà cambiato prendendo con il JOIN
+				// solo i moduli dei dispositivi associati al player corrente
+				ResultSet ss = Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
+				List<Module> modules_2 = new ArrayList<Module>();
+
+				while (ss.next()) {
+
+					int id = ss.getInt("id");
+					String name = ss.getString("name");
 					String iframe = ss.getString("iframe");
 					String serial = ss.getString("id_device");
 
@@ -81,31 +68,14 @@ public class DeleteModule extends HttpServlet {
 					modules_2.add(moduleTemp);
 
 				}
-				
+
 				data.put("lista_modules_menu", modules_2);
-	        	 
+
 				/* END RETRIVING MODULE */
 				data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
 				data.put("userMail", (String) s.getAttribute("username"));
-				data.put("titlePage", "Moduli");
-
-				ResultSet rs = Database.selectRecord("modules", "1");
-				List<Module> modules = new ArrayList<Module>();
-
-				while (rs.next()) {
-					
-					int id = rs.getInt("id");
-					String name= rs.getString("name");
-					String iframe = rs.getString("iframe");
-					String serial = rs.getString("id_device");
-
-					Module moduleTemp = new Module(id, name, iframe, serial);
-
-					modules.add(moduleTemp);
-
-				}
+				data.put("titlePage", "Kura");
 				
-				data.put("lista_module", modules);
 				/* 	RETRIVING FRIENDS */
 				ResultSet fr = Database.selectRecord("friends", "my_mail='"+ (String) s.getAttribute("username") + "'");
 				List<Friend> friends = new ArrayList<Friend>();
@@ -134,15 +104,12 @@ public class DeleteModule extends HttpServlet {
 					
 				}
 				data.put("friendList", friends);
-				FreeMarker.process("deletemodule.html", data, response, getServletContext());
-				
+				FreeMarker.process("kuracontroller.html", data, response, getServletContext());
 			}
-			
-			
 		} else {
+			// mando alla login
 			response.sendRedirect("pages-signin");
 		}
-
 		Database.close();
 	}
 
@@ -201,5 +168,4 @@ public class DeleteModule extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
 }

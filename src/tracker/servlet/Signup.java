@@ -43,6 +43,7 @@ public class Signup extends HttpServlet {
         } else if (request.getMethod().equals("POST")) {
             //Recupera il nome dell'utente
             String nome = request.getParameter("nome");
+            int peso = Integer.parseInt(request.getParameter("peso"));
             //Recupera l'email dell'utente
             String email = request.getParameter("email");
             //Recupera la password dell'utente
@@ -51,6 +52,7 @@ public class Signup extends HttpServlet {
             Database.connect();
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("email", email);
+            map.put("kg", peso);
             map.put("password", DataUtil.crypt(password));
             map.put("nome", nome);
 

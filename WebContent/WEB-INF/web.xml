@@ -58,7 +58,22 @@
         <servlet-name>MeteoController</servlet-name>
         <servlet-class>tracker.servlet.MeteoController</servlet-class>
     </servlet>
-    
+    <servlet>
+        <servlet-name>Friends</servlet-name>
+        <servlet-class>tracker.servlet.Friends</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChallengeController</servlet-name>
+        <servlet-class>tracker.servlet.ChallengeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>KuraController</servlet-name>
+        <servlet-class>tracker.servlet.KuraController</servlet-class>
+    </servlet>
+      <servlet>
+        <servlet-name>Messages</servlet-name>
+        <servlet-class>tracker.servlet.Messages</servlet-class>
+    </servlet>
     
     
     
@@ -114,10 +129,22 @@
     <servlet-name>MeteoController</servlet-name>
         <url-pattern>/meteo</url-pattern>
     </servlet-mapping>
-    
-    
-    
-    
+    <servlet-mapping>
+    <servlet-name>Friends</servlet-name>
+        <url-pattern>/friends</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>ChallengeController</servlet-name>
+        <url-pattern>/challengecontroller</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+    <servlet-name>KuraController</servlet-name>
+        <url-pattern>/kuracontroller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>Messages</servlet-name>
+        <url-pattern>/messages</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

@@ -24,9 +24,9 @@
 													<div class="summary">
 														<h4 class="title">Percorso</h4>
 														<div class="info">
-															<strong class="amount">1281 km</strong>
+															<strong class="amount">${weekKm?c} km</strong>
 															</br>
-															<span class="text-primary">In (14 unread) minuti</span>
+															<span class="text-primary">In ${weekTime?c} minuti</span>
 														</div>
 													</div>
 													
@@ -58,9 +58,10 @@
 												<div class="widget-summary-col">
 													<div class="summary">
 														<h4 class="title">Report Mensile</h4>
+														
 														<div class="info">
-															<strong class="amount">1281 km</strong>
-															<span class="text-primary">(14 unread)</span>
+															<strong class="amount">${monthKm?c} km</strong>
+															<span class="text-primary">(${monthTime} min)</span>
 														</div>
 													</div>
 													
@@ -81,8 +82,9 @@
 												<div class="widget-summary-col">
 													<div class="summary">
 														<h4 class="title">Calorie bruciate</h4>
+														<h5>Calcolo mensile approssimativo, servirebbero più informazioni per un calcolo dettagliato</h5>
 														<div class="info">
-															<strong class="amount">243151 cal</strong>
+															<strong class="amount">${monthCal?c} cal</strong>
 														</div>
 													</div>
 													
@@ -104,7 +106,7 @@
 													<div class="summary">
 														<h4 class="title">Località percorse</h4>
 														<div class="info">
-															<strong class="amount">38</strong>
+															<strong class="amount">${localitapercorse}</strong>
 														</div>
 													</div>
 													
@@ -126,7 +128,7 @@
 													<div class="summary">
 														<h4 class="title">Amici</h4>
 														<div class="info">
-															<strong class="amount">3765</strong>
+															<strong class="amount">${friendNumber?c}</strong>
 														</div>
 													</div>
 													
@@ -149,44 +151,29 @@
 										<a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
 										<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
 									</div>
-
-									<h2 class="panel-title">Diario</h2>
+							<#if events?first ??>
+									<h2 class="panel-title">Registro attività</h2>
 								</header>
 								<div class="panel-body">
 									<div class="timeline timeline-simple mt-xlg mb-md">
 										<div class="tm-body">
-											<div class="tm-title">
-												<h3 class="h5 text-uppercase">November 2013</h3>
-											</div>
+											
 											<ol class="tm-items">
+											<#list events as event>
 												<li>
 													<div class="tm-box">
-														<p class="text-muted mb-none">7 months ago.</p>
+														<p class="text-muted mb-none">${event.timestamp}</p>
 														<p>
-															It's awesome when we find a good solution for our projects, Porto Admin is <span class="text-primary">#awesome</span>
+															${event.description}
 														</p>
 													</div>
 												</li>
-												<li>
-													<div class="tm-box">
-														<p class="text-muted mb-none">7 months ago.</p>
-														<p>
-															Checkout! How cool is that!
-														</p>
-														<div class="thumbnail-gallery">
-															<a class="img-thumbnail lightbox" href="template/assets/images/projects/project-4.jpg" data-plugin-options='{ "type":"image" }'>
-																<img class="img-responsive" width="215" src="template/assets/images/projects/project-4.jpg">
-																<span class="zoom">
-																	<i class="fa fa-search"></i>
-																</span>
-															</a>
-														</div>
-													</div>
-												</li>
+												</#list>
 											</ol>
 										</div>
 									</div>
 								</div>
+								</#if>
 							</section>
 						</div>
 					</div>

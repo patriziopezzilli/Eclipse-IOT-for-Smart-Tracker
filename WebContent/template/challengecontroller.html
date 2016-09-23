@@ -1,37 +1,40 @@
 <#include "framepublic.html">
-<img src="template/assets/images/modu.png" style="width:8em; margin-bottom:2em; margin-left:40%;">
-
+<img src="template/assets/images/cup.png" style="width:8em; margin-bottom:2em; margin-left:40%;">
 <section class="panel">
+
 							<header class="panel-heading">
 								<div class="panel-actions">
 									<a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
 									<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
 								</div>
 						
-								<h2 class="panel-title">Elenco Moduli</h2>
+								<h2 class="panel-title">Classifica</h2>
 							</header>
 							
-							<#if lista_modules?first ??>
+							<#if challengeList?first ??>
 							<div class="panel-body">
 								<table class="table table-bordered table-striped mb-none" id="datatable-default">
 									<thead>
 										<tr>
-											<th>Name</th>
-											<th>Serial Dispositivo</th>
+											<th>Posizione</th>
+											<th>Nome</th>
+											<th>Km totali</th>
 										</tr>
 									</thead>
 									<tbody>
-										<#list lista_modules as module> 
+										<#list challengeList as list> 
 										<tr class="gradeA">
-											<td>${module.id}</td>
-											<td>${module.id_device}</td>
+											<td>${list?index+1}</td>
+											<td>${list.name}</td>
+											<td>${list.totKm?c}</td>
 										</tr>
 										</#list>
 									</tbody>
 								</table>
 							</div>
 							<#else>
-							<p>Moduli non presenti </p>
+							<p>Device non presenti </p>
 							</#if>
 						</section>
+
 <#include "footer.html">

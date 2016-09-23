@@ -1,5 +1,7 @@
 package tracker.model;
 
+import java.util.Date;
+
 public class Path {
 	
 	int id;
@@ -7,6 +9,7 @@ public class Path {
 	int km;
 	int time;        //express in hours
 	String user;
+	Date timestamp;
 	
 	public Path(int id, String city, int km, int time, String user) {
 		super();
@@ -15,6 +18,25 @@ public class Path {
 		this.km = km;
 		this.time = time;
 		this.user = user;
+	}
+
+	public Path(int id, String city, int km, int time, String user, Date timestamp) {
+		super();
+		this.id = id;
+		this.city = city;
+		this.km = km;
+		this.time = time;
+		this.user = user;
+		this.timestamp = timestamp;
+	}
+
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public int getId() {

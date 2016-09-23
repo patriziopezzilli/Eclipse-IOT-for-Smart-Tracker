@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import tracker.model.Device;
 import tracker.model.Friend;
+import tracker.model.Message;
 import tracker.model.Module;
 import tracker.util.DataUtil;
 import tracker.util.Database;
@@ -26,11 +27,13 @@ import tracker.util.FreeMarker;
 import tracker.util.SecurityLayer;
 
 /**
- * servlet per la pagina di lista dei moduli con opzione di delete
+ * servlet per la pagina degli amici
+ * permette la gestione totale, quindi
+ * aggiunta, modifica e eliminazione degli stessi.
  *
  * @author Patrizio
  */
-public class DeleteModule extends HttpServlet {
+public class Friends extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,16 +55,59 @@ public class DeleteModule extends HttpServlet {
 			
 			if (request.getMethod().equals("POST")) {
 				
-				String id = request.getParameter("id");
-				Database.deleteRecord("modules", "id='" + id + "'");
-				Map<String, Object> events = new HashMap<String, Object>();
-				events.put("description", "Ho eliminato il modulo "+ id);
-				events.put("email_user", (String) s.getAttribute("username"));
+				String mode = request.getParameter("addMode");
+				String email = request.getParameter("email");
+				if(mode != null){
+					//we are creating new one
+					Map<String, Object> map = new HashMap<String, Object>();
 
-				Database.insertRecord("events", events);
-				response.sendRedirect("modulelist");
+					// da cambiare
+					map.put("friend_mail", email);
+					map.put("my_mail", (String) s.getAttribute("username"));
+					
+
+					Database.insertRecord("friends", map);
+					Map<String, Object> events = new HashMap<String, Object>();
+					events.put("description", "Ho aggiunto agli amici "+ email);
+					events.put("email_user", (String) s.getAttribute("username"));
+
+					Database.insertRecord("events", events);
+					response.sendRedirect("friends");
+				}else{
+					//we are deleting
+					Database.deleteRecord("friends", "friend_mail='" + email + "' && my_mail='"+(String) s.getAttribute("username")+"'");
+					Map<String, Object> events = new HashMap<String, Object>();
+					events.put("description", "Ho eliminato l'amico "+ email);
+					events.put("email_user", (String) s.getAttribute("username"));
+
+					Database.insertRecord("events", events);
+					response.sendRedirect("friends");
+				}
 				
 			} else {
+				
+				
+				//check if i have to delete something
+				if(request.getParameter("idmess") != null){
+					Database.deleteRecord("messages", "id="+Integer.parseInt(request.getParameter("idmess")));
+					response.sendRedirect("friends");
+				}
+				// retrive messages
+				
+				ResultSet ms = Database.selectRecord("messages", "dest_mail='"+(String) s.getAttribute("username")+"'");
+				List<Message> messages = new ArrayList<Message>();
+				
+				while(ms.next()){
+					int id= ms.getInt("id");
+					String mitt_mail = ms.getString("mitt_mail");
+					String content= ms.getString("content");
+					
+					Message messTemp = new Message(id,mitt_mail,content);
+					messages.add(messTemp);
+					
+				}
+				
+				data.put("messageList", messages);
 				/* RETRIVING MODULE */
 	        	 
 	        	 //retriving module --> andrà cambiato prendendo con il JOIN
@@ -85,27 +131,7 @@ public class DeleteModule extends HttpServlet {
 				data.put("lista_modules_menu", modules_2);
 	        	 
 				/* END RETRIVING MODULE */
-				data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
-				data.put("userMail", (String) s.getAttribute("username"));
-				data.put("titlePage", "Moduli");
-
-				ResultSet rs = Database.selectRecord("modules", "1");
-				List<Module> modules = new ArrayList<Module>();
-
-				while (rs.next()) {
-					
-					int id = rs.getInt("id");
-					String name= rs.getString("name");
-					String iframe = rs.getString("iframe");
-					String serial = rs.getString("id_device");
-
-					Module moduleTemp = new Module(id, name, iframe, serial);
-
-					modules.add(moduleTemp);
-
-				}
 				
-				data.put("lista_module", modules);
 				/* 	RETRIVING FRIENDS */
 				ResultSet fr = Database.selectRecord("friends", "my_mail='"+ (String) s.getAttribute("username") + "'");
 				List<Friend> friends = new ArrayList<Friend>();
@@ -134,7 +160,29 @@ public class DeleteModule extends HttpServlet {
 					
 				}
 				data.put("friendList", friends);
-				FreeMarker.process("deletemodule.html", data, response, getServletContext());
+				data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
+				data.put("userMail", (String) s.getAttribute("username"));
+				data.put("titlePage", "Amici");
+
+				ResultSet rs = Database.selectRecord("modules", "1");
+				List<Module> modules = new ArrayList<Module>();
+
+				while (rs.next()) {
+					
+					int id = rs.getInt("id");
+					String name= rs.getString("name");
+					String iframe = rs.getString("iframe");
+					String serial = rs.getString("id_device");
+
+					Module moduleTemp = new Module(id, name, iframe, serial);
+
+					modules.add(moduleTemp);
+
+				}
+				
+				data.put("lista_module", modules);
+
+				FreeMarker.process("friends.html", data, response, getServletContext());
 				
 			}
 			
@@ -201,5 +249,5 @@ public class DeleteModule extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
 }
+

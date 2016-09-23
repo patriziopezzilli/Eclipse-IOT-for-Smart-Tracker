@@ -47,6 +47,7 @@ public class Login extends HttpServlet {
             String pass = request.getParameter("password");
 
             if (isNull(email) || isNull(pass)) {
+            	
                 FreeMarker.process("pages-signin.html", data, response, getServletContext());
             }
             try {
@@ -67,6 +68,11 @@ public class Login extends HttpServlet {
                 //carichiamo lo userid dal database utenti
                 //load userid from user database
                 SecurityLayer.createSession(request, email, userid);
+                Database.connect();
+                Map<String, Object> temp = new HashMap<String, Object>();
+        		temp.put("active", '1');
+        		Database.updateRecord("users", temp, "email ='" + email + "'");
+                Database.close();
                 response.sendRedirect("index");
             }
         }

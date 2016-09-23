@@ -1,0 +1,140 @@
+<#include "framepublic.html">
+<img src="template/assets/images/friend22.png" style="width:8em; margin-bottom:2em; margin-left:40%;">
+<section class="panel">
+							<header class="panel-heading">
+								<div class="panel-actions">
+									<a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+									<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+								</div>
+						
+								<h2 class="panel-title">Elenco Amici</h2>
+							</header>
+							
+							<#if friendList?first ??>
+							<div class="panel-body">
+								<table class="table table-bordered table-striped mb-none" id="datatable-default">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Email</th>
+											<th>Km percorsi</th>
+											<th>Opzioni</th>
+										</tr>
+									</thead>
+									<tbody>
+										<#list friendList as friend> 
+										<tr class="gradeA">
+											<td>${friend.id}</td>
+											<td>${friend.email}</td>
+											<td>${friend.totKm}</td>
+											<td>
+											<a href="mailto:${friend.email}"><img src="template/assets/images/sms.png" style="width:3em;"></a>
+											<a href="messages?email=${friend.email}"><img src="template/assets/images/mail.png" style="width:3em;"></a>
+											</td>
+										</tr>
+										</#list>
+									</tbody>
+								</table>
+							</div>
+							<#else>
+							<p>Amici non presenti, aggiungine uno! </p>
+							</#if>
+						</section>
+						
+						<section class="panel">
+							<header class="panel-heading">
+								<div class="panel-actions">
+									<a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+									<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+								</div>
+						
+								<h2 class="panel-title">Messaggi</h2>
+							</header>
+							
+							<#if messageList?first ??>
+							<div class="panel-body">
+								<table class="table table-bordered table-striped mb-none" id="datatable-default">
+									<thead>
+										<tr>
+											<th>Mittente</th>
+											<th>Contenuto</th>
+											<th>Opzioni</th>
+										</tr>
+									</thead>
+									<tbody>
+										<#list messageList as message> 
+										<tr class="gradeA">
+											<td>${message.mitt}</td>
+											<td>${message.content}</td>
+											<td>
+											<a href="friends?idmess=${message.id}"><img src="template/assets/images/delete.png" style="width:2em;"></a>
+											</td>
+										</tr>
+										</#list>
+									</tbody>
+								</table>
+							</div>
+							<#else>
+							<p> Non hai alcun messaggio da leggere </p>
+							</#if>
+						</section>
+						
+						
+						
+						
+<section class="panel">
+	<header class="panel-heading">
+		<div class="panel-actions">
+			<a href="#" class="panel-action panel-action-toggle"
+				data-panel-toggle></a> <a href="#"
+				class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+		</div>
+
+		<h2 class="panel-title">Aggiungi amico</h2>
+	</header>
+	<div class="panel-body">
+		<form class="form-horizontal form-bordered" action="friends"
+			method="post">
+			<div class="form-group">
+				<label class="col-md-3 control-label" for="inputDefault">Email</label>
+				<div class="col-md-6">
+					<input type="text" name="email" class="form-control"
+						id="inputDefault">
+						<input type="text" name="addMode" value="true" hidden>
+				</div>
+			</div>
+			<div class="col-sm-4 text-right">
+				<button style="margin-left: 20em;" type="submit"
+					class="btn btn-primary hidden-xs">Aggiungi</button>
+			</div>
+		</form>
+	</div>
+</section>
+<section class="panel">
+	<header class="panel-heading">
+		<div class="panel-actions">
+			<a href="#" class="panel-action panel-action-toggle"
+				data-panel-toggle></a> <a href="#"
+				class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+		</div>
+
+		<h2 class="panel-title">Elimina amico</h2>
+	</header>
+	<div class="panel-body">
+		<form class="form-horizontal form-bordered" action="friends"
+			method="post">
+			<div class="form-group">
+				<label class="col-md-3 control-label" for="inputDefault">Email</label>
+				<div class="col-md-6">
+					<input type="text" name="email" class="form-control"
+						id="inputDefault">
+				</div>
+			</div>
+			<div class="col-sm-4 text-right">
+				<button style="margin-left: 20em;" type="submit"
+					class="btn btn-primary hidden-xs">Rimuovi</button>
+			</div>
+		</form>
+	</div>
+</section>
+<#include "footer.html">

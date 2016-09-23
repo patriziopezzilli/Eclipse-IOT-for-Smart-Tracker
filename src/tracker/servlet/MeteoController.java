@@ -33,6 +33,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import tracker.model.Device;
+import tracker.model.Friend;
 import tracker.model.Module;
 import tracker.util.DataUtil;
 import tracker.util.Database;
@@ -112,14 +113,54 @@ public class MeteoController extends HttpServlet {
 	        System.out.println("Temperature: " + cwd.getMainInstance().getMaxTemperature()
 	                            + "/" + cwd.getMainInstance().getMinTemperature() + "\'F");
 	        
-	        data.put("maxTemp", cwd.getMainInstance().getMaxTemperature());
-	        data.put("minTemp", cwd.getMainInstance().getMinTemperature());
-			data.put("temp",cwd.getMainInstance().getTemperature());
+	        
+	        float maxTemp= (cwd.getMainInstance().getMaxTemperature() - 32);
+	        maxTemp *= 0.55;
+	        int maxTemp1= (int) maxTemp;
+	        float minTemp= (cwd.getMainInstance().getMinTemperature() - 32);
+	        minTemp *= 0.55;
+	        int minTemp1= (int) minTemp;
+	        float temp= (cwd.getMainInstance().getTemperature() - 32);
+	        temp *= 0.55;
+	        int temp1 = (int) temp;
+	        
+	        data.put("maxTemp", maxTemp1);
+	        data.put("minTemp", minTemp1 );
+			data.put("temp", temp1);
 			data.put("pressure",cwd.getMainInstance().getPressure());
 			data.put("humidity",cwd.getMainInstance().getHumidity());
 	       
 			/* End populate PAGE */
 			data.put("titlePage", "Luoghi e Meteo");
+			
+			/* 	RETRIVING FRIENDS */
+			ResultSet fr = Database.selectRecord("friends", "my_mail='"+ (String) s.getAttribute("username") + "'");
+			List<Friend> friends = new ArrayList<Friend>();
+			while(fr.next()){
+				
+				//retrive friend data
+				int id = fr.getInt("id");
+				String friend_mail = fr.getString("friend_mail");
+				
+				int totKm = 0;
+				//retrive tot km
+				ResultSet km = Database.selectRecord("path", "user='"+ friend_mail + "'");
+				while(km.next()){
+					totKm += km.getInt("km");
+				}
+				
+				//retriving name
+				ResultSet us = Database.selectRecord("users", "email='"+ friend_mail + "'");
+				us.next();
+				String name = us.getString("nome");
+
+				int active = us.getInt("active");
+				//now create the obj and add to the list
+				Friend tempUser = new Friend(id,friend_mail,totKm,name,active);
+				friends.add(tempUser);
+				
+			}
+			data.put("friendList", friends);
 			FreeMarker.process("meteo.html", data, response, getServletContext());
 			
 		} else {

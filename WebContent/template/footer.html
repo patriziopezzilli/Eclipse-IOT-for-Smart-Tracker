@@ -19,24 +19,35 @@
 							</div>
 			
 							<div class="sidebar-widget widget-friends">
-								<h6>Friends</h6>
+								<h6>Amici</h6>
 								<ul>
+								<#if friendList?first ??>
+									<#list friendList as friend> 
+									<#if friend.active==1>
 									<li class="status-online">
 										<figure class="profile-picture">
-											<img src="template/assets/images/!sample-user.jpg" alt="Joseph Doe" class="img-circle">
+											<img src="template/assets/images/friend.png" alt="Joseph Doe" class="img-circle">
 										</figure>
 										<div class="profile-info">
-											<span class="name">Joseph Doe Junior</span>
+										<span class="name">${friend.name}</span>
+											<span class="name">${friend.email}</span>
 										</div>
 									</li>
-									<li class="status-online">
+									<#else>
+									<li class="status-offline">
 										<figure class="profile-picture">
-											<img src="template/assets/images/!sample-user.jpg" alt="Joseph Doe" class="img-circle">
+											<img src="template/assets/images/friend.png" alt="Joseph Doe" class="img-circle">
 										</figure>
 										<div class="profile-info">
-											<span class="name">Joseph Doe Junior</span>
+										<span class="name">${friend.name}</span>
+											<span class="name">${friend.email}</span>
 										</div>
 									</li>
+									</#if>
+									</#list>
+									<#else>
+									Nessun amico presente.
+									</#if>
 									
 								</ul>
 							</div>

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import tracker.model.Friend;
 import tracker.model.Module;
 import tracker.model.Path;
 import tracker.util.DataUtil;
@@ -54,6 +55,13 @@ public class PathController extends HttpServlet {
 				if(id != null){
 					//delete mode
 					Database.deleteRecord("path", "id='" + id + "'");
+					Map<String, Object> events = new HashMap<String, Object>();
+					events.put("description", "Ho eliminato il percorso "+ id);
+					events.put("email_user", (String) s.getAttribute("username"));
+
+					Database.insertRecord("events", events);
+					response.sendRedirect("pathcontroller");
+					
 				} else {
 					//add mode
 					String city = request.getParameter("city");
@@ -70,6 +78,12 @@ public class PathController extends HttpServlet {
 					map.put("user", (String) s.getAttribute("username"));
 
 					Database.insertRecord("path", map);
+					Map<String, Object> events = new HashMap<String, Object>();
+					events.put("description", "Ho aggiunto il percorso presso "+ city);
+					events.put("email_user", (String) s.getAttribute("username"));
+
+					Database.insertRecord("events", events);
+					response.sendRedirect("pathcontroller");
 				}
 				
 			} else {
@@ -118,7 +132,34 @@ public class PathController extends HttpServlet {
 				}
 				
 				data.put("lista_path", paths);
+				/* 	RETRIVING FRIENDS */
+				ResultSet fr = Database.selectRecord("friends", "my_mail='"+ (String) s.getAttribute("username") + "'");
+				List<Friend> friends = new ArrayList<Friend>();
+				while(fr.next()){
+					
+					//retrive friend data
+					int id = fr.getInt("id");
+					String friend_mail = fr.getString("friend_mail");
+					
+					int totKm = 0;
+					//retrive tot km
+					ResultSet km = Database.selectRecord("path", "user='"+ friend_mail + "'");
+					while(km.next()){
+						totKm += km.getInt("km");
+					}
+					
+					//retriving name
+					ResultSet us = Database.selectRecord("users", "email='"+ friend_mail + "'");
+					us.next();
+					String name = us.getString("nome");
 
+					int active = us.getInt("active");
+					//now create the obj and add to the list
+					Friend tempUser = new Friend(id,friend_mail,totKm,name,active);
+					friends.add(tempUser);
+					
+				}
+				data.put("friendList", friends);
 				FreeMarker.process("pathcontroller.html", data, response, getServletContext());
 				
 			}

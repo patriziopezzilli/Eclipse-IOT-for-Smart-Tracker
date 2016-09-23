@@ -2,7 +2,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-	<img src="template/assets/images/rasp.png" style="width:8em; margin-bottom:2em; margin-left:40%;">
+	<img src="template/assets/images/send.png" style="width:8em; margin-bottom:2em; margin-left:40%;">
 	
 		<section class="panel">
 			<header class="panel-heading">
@@ -12,20 +12,20 @@
 						class="panel-action panel-action-dismiss" data-panel-dismiss></a>
 				</div>
 
-				<h2 class="panel-title">Aggiungi il tuo device</h2>
+				<h2 class="panel-title">Componi messaggio</h2>
 			</header>
 			<div class="panel-body">
-				<form class="form-horizontal form-bordered" action="device-signup" method="post">
-					<img src="template/assets/images/rpi.jpg" style=" margin-bottom:2em; margin-left:15%;">
+				<form class="form-horizontal form-bordered" action="messages" method="post">
 				
 					<div class="form-group">
-						<label class="col-md-3 control-label" for="inputDefault">Seriale</label>
+						<label class="col-md-3 control-label" for="inputDefault">Corpo</label>
 						<div class="col-md-6">
-							<input type="text" name="serial" class="form-control" id="inputDefault">
+							<input type="text" name="messaggio" class="form-control" id="inputDefault">
+							<input type="hidden" name="dest" value="${emaildest}" class="form-control">
 						</div>
 					</div>
 					<div class="col-sm-4 text-right">
-					<button style="margin-left:20em;" type="submit" class="btn btn-primary hidden-xs">Aggiungi</button>
+					<button style="margin-left:20em;" type="submit" class="btn btn-primary hidden-xs">Invia</button>
 					</div>
 				</form>
 			</div>

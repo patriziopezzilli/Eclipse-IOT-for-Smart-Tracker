@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.isNull;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,11 +28,12 @@ import tracker.util.FreeMarker;
 import tracker.util.SecurityLayer;
 
 /**
- * servlet per la pagina di lista dei moduli
+ * servlet per la pagina della classifica
+ * relativa agli amici
  *
  * @author Patrizio
  */
-public class ListModule extends HttpServlet {
+public class ChallengeController extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,7 +57,7 @@ public class ListModule extends HttpServlet {
        	 
        	 //retriving module --> andrà cambiato prendendo con il JOIN
        	 //solo i moduli dei dispositivi associati al player corrente
-       	 ResultSet ss = Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
+       	 ResultSet ss =Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
 			 List<Module> modules_2 = new ArrayList<Module>();
 
 			 while (ss.next()) {
@@ -75,25 +78,8 @@ public class ListModule extends HttpServlet {
 			/* END RETRIVING MODULE */
 			data.put("userName", DataUtil.getUsername((String) s.getAttribute("username")));
 			data.put("userMail", (String) s.getAttribute("username"));
-			data.put("titlePage", "Moduli");
+			data.put("titlePage", "Classifica");
 
-			ResultSet rs = Database.selectRecord("modules,devices","devices.serial = modules.id_device AND devices.email_user ='"+(String) s.getAttribute("username")+"'");
-			List<Module> modules = new ArrayList<Module>();
-
-			while (rs.next()) {
-				
-				int id = rs.getInt("id");
-				String name= rs.getString("name");
-				String iframe = rs.getString("iframe");
-				String serial = rs.getString("id_device");
-
-				Module moduleTemp = new Module(id, name, iframe, serial);
-
-				modules.add(moduleTemp);
-
-			}
-			
-			data.put("lista_modules", modules);
 			/* 	RETRIVING FRIENDS */
 			ResultSet fr = Database.selectRecord("friends", "my_mail='"+ (String) s.getAttribute("username") + "'");
 			List<Friend> friends = new ArrayList<Friend>();
@@ -122,7 +108,36 @@ public class ListModule extends HttpServlet {
 				
 			}
 			data.put("friendList", friends);
-			FreeMarker.process("modulelist.html", data, response, getServletContext());
+			//now add to the list my profile
+			ResultSet pp = Database.selectRecord("users", "email='"+ (String) s.getAttribute("username")+"'");
+			pp.next();
+			int myKm = 0;
+			//retrive tot km
+			ResultSet mm = Database.selectRecord("path", "user='"+ (String) s.getAttribute("username") + "'");
+			while(mm.next()){
+				myKm += mm.getInt("km");
+			}
+			Friend myUser = new Friend(pp.getInt("id"),(String) s.getAttribute("username"), myKm ,pp.getString("nome"));
+			
+			friends.add(myUser);
+			//sorting list by km to higher to lower
+			
+			// Sorting
+			Collections.sort(friends, new Comparator<Friend>() {
+			        @Override
+			        public int compare(Friend friend1, Friend friend2)
+			        {
+			            return (friend2.getTotKm()-friend1.getTotKm());
+			        }
+			    });
+			
+			//end sorting
+			
+			data.put("challengeList",friends);
+			/* END RETRIVING FRIENDS */
+			
+			
+			FreeMarker.process("challengecontroller.html", data, response, getServletContext());
 			
 		} else {
 			response.sendRedirect("pages-signin");
